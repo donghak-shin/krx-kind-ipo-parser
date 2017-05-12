@@ -1,0 +1,15 @@
+{
+  "name": "krx_parse_bot",
+  "version": "1.0.0",
+  "description": "parsing krx ipo page",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "enak.at",
+  "license": "ISC",
+  "dependencies": {
+    "jsdom": "^10.1.0",
+    "request": "^2.81.0"
+  }
+}
