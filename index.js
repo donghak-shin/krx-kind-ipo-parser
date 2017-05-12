@@ -24,14 +24,14 @@ function parseKRX(callback) {
     JSDOM.fromURL(URL).then((dom) => {
         const corp = dom.window.document.querySelector("table.detail").querySelector(".first td").textContent.trim()
         const progress = dom.window.document.querySelectorAll("section.type-99 li.active code")
-        let text = corp + " IPO 심사 진행상황\n";
+        let text = corp + " IPO 심사 진행상황\n"
 
         progress.forEach((value) => {
             text += value.getAttribute("title") + "\n"
         })
 
         callback(text)
-    });
+    })
 }
 
 function main() {
