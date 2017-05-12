@@ -1,47 +1,43 @@
-var config = require('./config');
-var request = require('request');
-var jsdom = require('jsdom');
-const { JSDOM } = jsdom;
+const request = require('request')
+const { JSDOM } = require('jsdom')
+const config = require('./config')
 
 function sendMessage(text) {
     // Text Only!
     if (!text) {
-        return;
+        return
     }
 
+    const URL = `https://api.telegram.org/bot${config.telegram.bot.id}:${config.telegram.bot.token}/sendMessage`
     request.post({
-        url: "https://api.telegram.org/bot" + config.telegram.bot.id + ":" + config.telegram.bot.token + "/sendMessage",
+        url: URL,
         json: {
             "chat_id": config.telegram.receiver,
             "text": text
         }
-    });
+    })
 }
 
-function parseKRX(cb) {
-    var url = "http://kind.krx.co.kr/listinvstg/listinvstgcom.do?method=searchListInvstgCorpDetail&bizProcNo=" + config.bizNo;
+function parseKRX(callback) {
+    const URL = `http://kind.krx.co.kr/listinvstg/listinvstgcom.do?method=searchListInvstgCorpDetail&bizProcNo=${config.bizNo}`
 
-    JSDOM.fromURL(url).then(dom => {
-        var corp = dom.window.document.querySelector("table.detail").querySelector(".first td").textContent.trim();
-        var progress = dom.window.document.querySelectorAll("section.type-99 li.active code");
+    JSDOM.fromURL(URL).then((dom) => {
+        const corp = dom.window.document.querySelector("table.detail").querySelector(".first td").textContent.trim()
+        const progress = dom.window.document.querySelectorAll("section.type-99 li.active code")
+        let text = corp + " IPO 심사 진행상황\n";
 
-        var text = corp + " IPO 심사 진행상황\n";
+        progress.forEach((value) => {
+            text += value.getAttribute("title") + "\n"
+        })
 
-        var len = progress.length;
-        for (var i = 0; i < len; i++) {
-            text += progress[i].getAttribute("title") + "\n";
-        }
-
-        cb(text);
+        callback(text)
     });
 }
 
 function main() {
-    parseKRX(function (text) {
-        if (text) {
-            sendMessage(text);
-        }
-    });
+    parseKRX((text) => {
+        sendMessage(text)
+    })
 }
 
-main();
+main()
