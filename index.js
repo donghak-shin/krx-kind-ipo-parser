@@ -22,12 +22,16 @@ function parseKRX(cb) {
     var url = "http://kind.krx.co.kr/listinvstg/listinvstgcom.do?method=searchListInvstgCorpDetail&bizProcNo=" + config.bizNo;
 
     JSDOM.fromURL(url).then(dom => {
-        var list = dom.window.document.querySelectorAll("section.type-99 li.active code");
-        var text = "";
+        var corpKo = dom.window.document.querySelector("table.detail").querySelectorAll(".first td")[0];
+        var progress = dom.window.document.querySelectorAll("section.type-99 li.active code");
 
-        var len = list.length;
+        // 난 정말 최선을 다했어
+        var corp = corpKo.innerHTML.trim().split("\n").pop().trim();
+        var text = corp + " IPO 심사 진행상황\n";
+
+        var len = progress.length;
         for (var i = 0; i < len; i++) {
-            text += list[i].getAttribute("title") + "\n";
+            text += progress[i].getAttribute("title") + "\n";
         }
 
         cb(text);
