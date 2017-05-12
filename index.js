@@ -18,8 +18,8 @@ function sendMessage(text) {
     })
 }
 
-function parseKRX(callback) {
-    const URL = `http://kind.krx.co.kr/listinvstg/listinvstgcom.do?method=searchListInvstgCorpDetail&bizProcNo=${config.bizNo}`
+function parseKRX(bizNo, callback) {
+    const URL = `http://kind.krx.co.kr/listinvstg/listinvstgcom.do?method=searchListInvstgCorpDetail&bizProcNo=${bizNo}`
 
     JSDOM.fromURL(URL).then((dom) => {
         const corp = dom.window.document.querySelector("table.detail").querySelector(".first td").textContent.trim()
@@ -35,7 +35,7 @@ function parseKRX(callback) {
 }
 
 function main() {
-    parseKRX((text) => {
+    parseKRX(config.bizNo, (text) => {
         sendMessage(text)
     })
 }
