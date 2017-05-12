@@ -27,7 +27,7 @@ function parseKRX(cb) {
 
         var len = list.length;
         for (var i = 0; i < len; i++) {
-            text += list[i].getAttribute("title");
+            text += list[i].getAttribute("title") + "\n";
         }
 
         cb(text);
